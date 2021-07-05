@@ -9,3 +9,6 @@ export const arrowLeft =
 
 export const clear =
   "data:image/svg+xml,%3Csvg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 512 512' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='none' stroke-miterlimit='10' stroke-width='32' d='M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z'%3E%3C/path%3E%3Cpath fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M320 320L192 192m0 128l128-128'%3E%3C/path%3E%3C/svg%3E";
+
+export const noData =
+  "data:image/svg+xml,%3Csvg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 24 24' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath fill='none' d='M0 0h24v24H0z'%3E%3C/path%3E%3Cpath d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E";

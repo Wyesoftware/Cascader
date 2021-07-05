@@ -8,6 +8,7 @@ import { Option } from "./components/molecules/Option";
 import { useController } from "./components/atoms/hooks/useController";
 import { useTree } from "./components/atoms/globals";
 import { useDirection } from "./components/atoms/hooks/useDirection";
+import { noData } from "./components/atoms/icons";
 
 const CascaderComponent = ({
   dir = "ltr",
@@ -35,8 +36,10 @@ const CascaderComponent = ({
     useState<string | number | undefined>(undefined);
 
   useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+    if (options && options.length > 0) {
+      setInputValue(value);
+    }
+  }, [value, options]);
 
   useEffect(() => {
     if (options && options.length > 0) {
@@ -90,35 +93,47 @@ const CascaderComponent = ({
           }}
         />
       </div>
-      {genOptions &&
-        genOptions.length > 0 &&
-        isOptionsOpen &&
+      {isOptionsOpen &&
         renderLayer(
-          <ul
-            dir={getDirection()}
-            data-cy="cascader-options"
-            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0 z-60"
-            {...layerProps}
-            style={{
-              boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",
-              ...layerProps.style,
-            }}
-          >
-            {genOptions.map((option, i) => (
-              <Option
-                key={i}
-                uid={option.uid}
-                label={option.label}
-                value={option.value}
-                children={option.children}
-                onClick={(value) => {
-                  setInputValue(value);
-                  onChange && onChange(value);
-                  setIsOptionsOpen(false);
-                }}
-              />
-            ))}
-          </ul>
+          genOptions && genOptions.length > 0 ? (
+            <ul
+              dir={getDirection()}
+              data-cy="cascader-options"
+              className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0 z-60"
+              {...layerProps}
+              style={{
+                boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",
+                ...layerProps.style,
+              }}
+            >
+              {genOptions.map((option, i) => (
+                <Option
+                  key={i}
+                  uid={option.uid}
+                  label={option.label}
+                  value={option.value}
+                  children={option.children}
+                  onClick={(value) => {
+                    setInputValue(value);
+                    onChange && onChange(value);
+                    setIsOptionsOpen(false);
+                  }}
+                />
+              ))}
+            </ul>
+          ) : (
+            <div
+              dir={getDirection()}
+              className="min-w-40 bg-white flex flex-row justify-between items-center p-4 z-60"
+              {...layerProps}
+              style={{
+                boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",
+                ...layerProps.style,
+              }}
+            >
+              <span>No Data</span> <img src={noData} alt="no-data" />
+            </div>
+          )
         )}
     </div>
   );
