@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import flat from "flat";
-import { IInput, IOption } from "../../types";
+import { IFlat, IInput, IOption } from "../../types";
 import { arrowDown, clear } from "../atoms/icons";
 
 export const Input = ({
@@ -9,7 +9,6 @@ export const Input = ({
   placeholder,
   options,
   inputValue,
-  onChange,
   allowClear,
   onClear,
 }: IInput) => {
@@ -23,11 +22,34 @@ export const Input = ({
   }, [inputValue]);
 
   const findLabel = (valueToFind: string | number, options: IOption[]) => {
-    const key = Object.entries(flat(options)).filter(
+    const flatteren: IFlat = flat(options);
+
+    let fullLabel = "";
+
+    const key = Object.entries(flatteren).filter(
       ([_, value]) => value === valueToFind
     )[0][0];
-    const prefix = key.split(".value");
-    return (flat(options) as any)[prefix[0] + ".label"];
+
+    if (key.includes("children")) {
+      const values = key.split(".children.");
+
+      for (let i = 0; i < values.length; i++) {
+        if (i === 0) {
+          fullLabel = flatteren[values[0] + ".label"] + " / ";
+        } else if (i + 1 === values.length) {
+          const prefix = key.split(".value");
+          fullLabel = fullLabel + flatteren[prefix[0] + ".label"];
+        } else {
+          const prefix = values.slice(0, i + 1).join(".children.");
+          fullLabel = fullLabel + flatteren[prefix + ".label"] + " / ";
+        }
+      }
+    } else {
+      const prefix = key.split(".value");
+      fullLabel = flatteren[prefix[0] + ".label"];
+    }
+
+    return fullLabel;
   };
 
   useEffect(() => {
@@ -37,7 +59,6 @@ export const Input = ({
     } else {
       setTextValue("");
     }
-    onChange(value ? value : undefined);
   }, [value]);
 
   return (
@@ -62,8 +83,7 @@ export const Input = ({
             alt="clear"
             onClick={(e) => {
               e.stopPropagation();
-              setValue("");
-              onClear && onClear();
+              onClear();
             }}
           />
         )}

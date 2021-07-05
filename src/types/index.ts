@@ -91,7 +91,10 @@ export interface IInput {
   placeholder?: string;
   options: IOption[];
   inputValue: string | number | undefined;
-  onChange: (value: string | number | undefined) => void;
   allowClear: boolean;
-  onClear?: () => void;
+  onClear: () => void;
+}
+
+export interface IFlat {
+  [x: string]: string;
 }

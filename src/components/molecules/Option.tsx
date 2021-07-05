@@ -28,12 +28,7 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
         data-cy="cascader-option"
         className="w-full flex flex-row justify-between items-center p-4 cursor-pointer select-none box-border hover:bg-[#e2e2e2]"
         {...triggerProps}
-        onClick={() => {
-          if (value && !children) {
-            onClick && onClick(value);
-          }
-          toggle(uid!, !isOptionsOpen);
-        }}
+        onClick={() => toggle(uid!, !isOptionsOpen)}
         data-value={value}
       >
         {label}

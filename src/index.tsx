@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles/index.css";
 import "virtual:windi.css";
-import { Props } from "./types";
+import { IOption, Props } from "./types";
 import { mergeRefs, useLayer } from "react-laag";
 import { Input } from "./components/molecules/Input";
 import { Option } from "./components/molecules/Option";
@@ -29,7 +29,7 @@ const CascaderComponent = ({
   const { setTree } = useTree();
   const { generate } = useController();
   const extraRef = React.useRef<HTMLInputElement>(null);
-  const [genOptions, setGenOptions] = useState<any[]>([]);
+  const [genOptions, setGenOptions] = useState<IOption[]>([]);
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] =
     useState<string | number | undefined>(undefined);
@@ -60,10 +60,6 @@ const CascaderComponent = ({
     possiblePlacements: getDirection() === "rtl" ? ["top-end"] : ["top-start"],
   });
 
-  const setValue = (value: string | number) => {
-    setInputValue(value);
-  };
-
   return (
     <div
       id="wyesoftware-cascader"
@@ -86,9 +82,12 @@ const CascaderComponent = ({
           placeholder={placeholder}
           options={options}
           inputValue={inputValue}
-          onChange={(value) => onChange && onChange(value)}
           allowClear={allowClear}
-          onClear={onClear}
+          onClear={() => {
+            setInputValue(undefined);
+            onChange && onChange(undefined);
+            onClear && onClear();
+          }}
         />
       </div>
       {genOptions &&
@@ -113,7 +112,8 @@ const CascaderComponent = ({
                 value={option.value}
                 children={option.children}
                 onClick={(value) => {
-                  setValue(value);
+                  setInputValue(value);
+                  onChange && onChange(value);
                   setIsOptionsOpen(false);
                 }}
               />
