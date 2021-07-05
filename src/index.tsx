@@ -39,10 +39,12 @@ const CascaderComponent = ({
   }, [value]);
 
   useEffect(() => {
-    generate(options);
-    setGenOptions(options);
-    if (!isOptionsOpen) {
-      setTree([]);
+    if (options && options.length > 0) {
+      generate(options);
+      setGenOptions(options);
+      if (!isOptionsOpen) {
+        setTree([]);
+      }
     }
   }, [options, isOptionsOpen]);
 
@@ -96,7 +98,7 @@ const CascaderComponent = ({
           <ul
             dir={getDirection()}
             data-cy="cascader-options"
-            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0"
+            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0 z-60"
             {...layerProps}
             style={{
               boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",

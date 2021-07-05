@@ -48,7 +48,7 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
           <ul
             dir={getDirection()}
             data-cy="cascader-options"
-            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0"
+            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0 z-60"
             {...layerProps}
             style={{
               boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",
@@ -70,6 +70,7 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
     </>
   ) : (
     <li
+      data-cy="cascader-option"
       className="w-full flex flex-row justify-between items-center p-4 cursor-pointer select-none box-border hover:bg-[#e2e2e2]"
       onClick={() => {
         if (value) {

@@ -1,7 +1,7 @@
 {
   "author": "Wyesoftware",
   "name": "@wyesoftware/cascader",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Cascader Component for React Typescript",
   "homepage": "https://github.com/Wyesoftware/Cascader",
   "main": "dist/index.js",
