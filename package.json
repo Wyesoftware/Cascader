@@ -1,7 +1,7 @@
 {
   "author": "Wyesoftware",
   "name": "@wyesoftware/cascader",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cascader Component for React Typescript",
   "homepage": "https://github.com/Wyesoftware/Cascader",
   "main": "dist/index.js",
@@ -29,21 +29,21 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@testing-library/react": "^12.0.0",
+    "@types/classnames": "^2.3.1",
     "@types/flat": "^5.0.1",
-    "@types/uuid": "^8.3.0",
-    "@types/node": "^15.12.4",
-    "@types/react": "^17.0.11",
+    "@types/node": "^16.0.0",
+    "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",
-    "babel-core": "^6.26.3",
-    "babel-runtime": "^6.26.0",
+    "@types/uuid": "^8.3.1",
+    "node-sass": "^6.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "rollup": "^2.52.2",
-    "rollup-plugin-sass": "^1.2.2",
-    "rollup-plugin-svg": "^2.0.0",
+    "rollup": "^2.52.7",
+    "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-typescript2": "^0.30.0",
-    "typescript": "^4.3.4"
+    "rollup-plugin-windicss": "^1.2.0",
+    "typescript": "^4.3.5",
+    "windicss": "^3.1.4"
   },
   "peerDependencies": {
     "react": "^17.0.2",
@@ -53,9 +53,10 @@
     "dist"
   ],
   "dependencies": {
-    "uuid": "^8.3.2",
+    "classnames": "^2.3.1",
     "flat": "^5.0.2",
     "react-laag": "^2.0.3",
-    "zustand": "^3.5.4"
+    "uuid": "^8.3.2",
+    "zustand": "^3.5.5"
   }
 }

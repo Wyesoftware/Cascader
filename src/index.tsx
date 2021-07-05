@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from "react";
-import "./styles/index.scss";
-import { IOption, Props } from "./types";
-import { useLayer } from "react-laag";
+import "./styles/index.css";
+import "virtual:windi.css";
+import { Props } from "./types";
+import { mergeRefs, useLayer } from "react-laag";
 import { Input } from "./components/molecules/Input";
 import { Option } from "./components/molecules/Option";
 import { useController } from "./components/atoms/hooks/useController";
 import { useTree } from "./components/atoms/globals";
-import { getDir } from "./components/atoms/hooks/useDirection";
+import { useDirection } from "./components/atoms/hooks/useDirection";
 
 const CascaderComponent = ({
+  dir = "ltr",
+  dirFromElement,
+  inputRef,
   name,
-  placeholder,
-  options,
   value,
+  placeholder,
   onChange,
+  onBlur,
+  options,
+  disabled = false,
+  readOnly = false,
   allowClear = false,
+  onClear,
+  className,
 }: Props) => {
+  const { setDirection, getDirection } = useDirection();
   const { setTree } = useTree();
   const { generate } = useController();
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [genOptions, setGenOptions] = useState<IOption[]>([]);
+  const extraRef = React.useRef<HTMLInputElement>(null);
+  const [genOptions, setGenOptions] = useState<any[]>([]);
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string | number | undefined>(
-    undefined
-  );
+  const [inputValue, setInputValue] =
+    useState<string | number | undefined>(undefined);
 
   useEffect(() => {
     setInputValue(value);
@@ -38,13 +47,15 @@ const CascaderComponent = ({
   }, [options, isOptionsOpen]);
 
   const { triggerProps, layerProps, renderLayer } = useLayer({
-    container: "wyesoftware-cascader",
     isOpen: isOptionsOpen,
-    onOutsideClick: () => setIsOptionsOpen(false),
-    placement: getDir() === "rtl" ? "bottom-end" : "bottom-start",
+    onOutsideClick: () => {
+      setIsOptionsOpen(false);
+      onBlur && onBlur();
+    },
+    placement: getDirection() === "rtl" ? "bottom-end" : "bottom-start",
     auto: true,
     overflowContainer: false,
-    possiblePlacements: getDir() === "rtl" ? ["top-end"] : ["top-start"],
+    possiblePlacements: getDirection() === "rtl" ? ["top-end"] : ["top-start"],
   });
 
   const setValue = (value: string | number) => {
@@ -52,22 +63,30 @@ const CascaderComponent = ({
   };
 
   return (
-    <div id="wyesoftware-cascader">
+    <div
+      id="wyesoftware-cascader"
+      dir={setDirection(dirFromElement) ? setDirection(dirFromElement) : dir}
+      className={className}
+    >
       <div
         {...triggerProps}
+        data-cy={"cascader-" + name}
         onClick={() => {
-          inputRef.current?.focus();
-          setIsOptionsOpen(!isOptionsOpen);
+          if (!disabled && !readOnly) {
+            extraRef.current?.focus();
+            setIsOptionsOpen(!isOptionsOpen);
+          }
         }}
       >
         <Input
-          inputRef={inputRef}
+          inputRef={inputRef ? mergeRefs(inputRef, extraRef) : extraRef}
           name={name}
           placeholder={placeholder}
           options={options}
           inputValue={inputValue}
           onChange={(value) => onChange && onChange(value)}
           allowClear={allowClear}
+          onClear={onClear}
         />
       </div>
       {genOptions &&
@@ -75,7 +94,9 @@ const CascaderComponent = ({
         isOptionsOpen &&
         renderLayer(
           <ul
-            className="cascader-options-container"
+            dir={getDirection()}
+            data-cy="cascader-options"
+            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0"
             {...layerProps}
             style={{
               boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",

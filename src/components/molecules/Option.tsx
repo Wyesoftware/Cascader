@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLayer } from "react-laag";
 import { IOption } from "../../types";
 import { useController } from "../atoms/hooks/useController";
-import { getDir } from "../atoms/hooks/useDirection";
+import { useDirection } from "../atoms/hooks/useDirection";
 import { arrowLeft, arrowRight } from "../atoms/icons";
 
 export const Option = ({ uid, label, value, children, onClick }: IOption) => {
+  const { getDirection } = useDirection();
   const { status, toggle } = useController();
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
 
@@ -14,10 +15,9 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
   }, [status(uid!)]);
 
   const { renderLayer, triggerProps, layerProps } = useLayer({
-    container: "wyesoftware-cascader",
     isOpen: isOptionsOpen,
     onParentClose: () => setIsOptionsOpen(false),
-    placement: getDir() ? "left-start" : "right-start",
+    placement: getDirection() === "rtl" ? "left-start" : "right-start",
     auto: true,
     overflowContainer: false,
   });
@@ -25,7 +25,8 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
   return children ? (
     <>
       <li
-        className="noselect boxSizing"
+        data-cy="cascader-option"
+        className="w-full flex flex-row justify-between items-center p-4 cursor-pointer select-none box-border hover:bg-[#e2e2e2]"
         {...triggerProps}
         onClick={() => {
           if (value && !children) {
@@ -36,12 +37,18 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
         data-value={value}
       >
         {label}
-        <img src={getDir() ? arrowLeft : arrowRight} alt="dropchild" />
+        <img
+          className="ltr:ml-2 rtl:mr-2"
+          src={getDirection() === "rtl" ? arrowLeft : arrowRight}
+          alt="dropchild"
+        />
       </li>
       {isOptionsOpen &&
         renderLayer(
           <ul
-            className="cascader-options-container"
+            dir={getDirection()}
+            data-cy="cascader-options"
+            className="min-w-40 bg-white flex flex-col justify-start items-start list-none m-0 p-0"
             {...layerProps}
             style={{
               boxShadow: "0px 4px 14px rgba(96, 79, 112, 0.05)",
@@ -63,7 +70,7 @@ export const Option = ({ uid, label, value, children, onClick }: IOption) => {
     </>
   ) : (
     <li
-      className="noselect boxSizing"
+      className="w-full flex flex-row justify-between items-center p-4 cursor-pointer select-none box-border hover:bg-[#e2e2e2]"
       onClick={() => {
         if (value) {
           onClick && onClick(value);

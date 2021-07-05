@@ -11,6 +11,7 @@ export const Input = ({
   inputValue,
   onChange,
   allowClear,
+  onClear,
 }: IInput) => {
   const [textValue, setTextValue] = useState<string>("");
   const [value, setValue] = useState<string | number>(
@@ -40,8 +41,9 @@ export const Input = ({
   }, [value]);
 
   return (
-    <div className="input-countainer">
+    <div className="flex flex-row justify-between items-center border border-[#e5e7eb] rounded-[0.125rem] p-[0.3rem] cursor-pointer focus-within:border-[#90caf9]">
       <input
+        className="w-full bg-transparent outline-none border-0 cursor-pointer"
         autoComplete="off"
         ref={inputRef}
         type="text"
@@ -52,16 +54,20 @@ export const Input = ({
         onChange={(e) => setTextValue(e.currentTarget.value)}
       />
       <input type="hidden" value={value} />
-      <div className="icon-container">
+      <div className="flex flex-row justify-between items-center">
         {allowClear && (
           <img
-            className="clear noselect"
+            className="mx-2 opacity-40 select-none hover:opacity-100"
             src={clear}
             alt="clear"
-            onClick={(e) => setValue("")}
+            onClick={(e) => {
+              e.stopPropagation();
+              setValue("");
+              onClear && onClear();
+            }}
           />
         )}
-        <img className="noselect" src={arrowDown} alt="dropdown" />
+        <img className="select-none" src={arrowDown} alt="dropdown" />
       </div>
     </div>
   );

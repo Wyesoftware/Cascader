@@ -1,4 +1,5 @@
-import sass from "rollup-plugin-sass";
+import scss from "rollup-plugin-scss";
+import WindiCSS from "rollup-plugin-windicss";
 import typescript from "rollup-plugin-typescript2";
 
 import pkg from "./package.json";
@@ -8,12 +9,17 @@ export default {
   output: [
     {
       file: pkg.main,
-      format: "cjs",
-      exports: "named",
-      sourcemap: true,
-      strict: false,
+      format: "esm",
     },
   ],
-  plugins: [sass({ insert: true }), typescript()],
-  external: ["react", "react-dom", "uuid", "flat", "react-laag", "zustand"],
+  plugins: [scss({ output: "./dist/bundle.css" }), ...WindiCSS(), typescript()],
+  external: [
+    "react",
+    "react-dom",
+    "classnames",
+    "flat",
+    "uuid",
+    "react-laag",
+    "zustand",
+  ],
 };
